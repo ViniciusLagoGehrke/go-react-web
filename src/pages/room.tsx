@@ -1,10 +1,23 @@
 import { useParams } from 'react-router-dom'
-
+import { toast } from 'sonner'
+import { ArrowRight, Share2 } from 'lucide-react'
 import amaLogo from '../assets/ama-logo.svg'
-import { ArrowRight, ArrowUp, Share2 } from 'lucide-react'
+import Message from '../components/message'
 
 export default function Room() {
   const { roomId } = useParams()
+
+  function handleShareRoom() {
+    const url = window.location.href.toString()
+    if (navigator.share != undefined && navigator.canShare()) {
+      navigator.share({ url })
+    } else {
+      navigator.clipboard.writeText(url)
+
+      toast.info('The room URL was copied to your clipboard!')
+    }
+
+  }
 
   return (
     <div className='mx-auto max-w-[640px] flex flex-col gap-6 py-10 px-4'>
@@ -17,7 +30,8 @@ export default function Room() {
 
         <button
           type='submit'
-          className='bg-zinc-800 text-zinc-300 px-3 py-1.5 gap-1.5 flex items-center rounded-lg font-medium text-sm transition-colors hover:bg-zinc-700'
+          onClick={handleShareRoom}
+          className='ml-auto bg-zinc-800 text-zinc-300 px-3 py-1.5 gap-1.5 flex items-center rounded-lg font-medium text-sm transition-colors hover:bg-zinc-700'
         >
           Compartilhar
           <Share2 className='size-4' />
@@ -45,22 +59,9 @@ export default function Room() {
       </form>
 
       <ol className='list-decimal list-outside px-3 space-y-8'>
-        <li className='ml-4 leading-relaxed text-zinc-100'>
-          O que é GoLang e quais são suas principais vantagens em comparação com outras linguagens de programação como Python, Java e C++?
-
-          <button type='button' className='mt-3 flex items-center gap-2 text-orange-400 text-sm font-medium hover:text-orange-500'>
-            <ArrowUp className='size-4' />
-            Curtint pergunta (42)
-          </button>
-        </li>
-        <li className='ml-4 leading-relaxed text-zinc-100'>
-          O que é GoLang e quais são suas principais vantagens em comparação com outras linguagens de programação como Python, Java e C++?
-
-          <button type='button' className='mt-3 flex items-center gap-2 text-zinc-400 text-sm font-medium hover:text-zinc-300' >
-            <ArrowUp className='size-4' />
-            Curtint pergunta (42)
-          </button>
-        </li>
+        <Message text='O que é GoLang e quais são suas principais vantagens em comparação com outras linguagens de programação como Python, Java e C++?' amountOfReactions={100} />
+        <Message text='Mussum Ipsum, cacilds vidis litro abertis.  Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl. Nullam volutpat risus nec leo commodo, ut interdum diam laoreet. Sed non consequat odio. Praesent malesuada urna nisi, quis volutpat erat hendrerit non. Nam vulputate dapibus. Cevadis im ampola pa arma uma pindureta.' amountOfReactions={50} answered />
+        <Message text=' Mauris nec dolor in eros commodo tempor. Aenean aliquam molestie leo, vitae iaculis nisl. Nullam volutpat risus nec leo commodo, ut interdum diam laoreet. Sed non consequat odio. Praesent malesuada urna nisi, quis volutpat erat hendrerit non. Nam vulputate dapibus. Cevadis im ampola pa arma uma pindureta.' amountOfReactions={10} />
       </ol>
     </div>
   )
